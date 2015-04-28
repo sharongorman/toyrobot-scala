@@ -28,10 +28,10 @@ sealed trait Direction {
   }
 }
 
-object North extends Direction
-object South extends Direction
-object West extends Direction
-object East extends Direction
+case object North extends Direction
+case object South extends Direction
+case object West extends Direction
+case object East extends Direction
 
 
 

@@ -3,9 +3,6 @@ package com.sharon
 import org.specs2.execute.Pending
 import org.specs2.mutable.Specification
 
-/**
- * Created by sharon.holliday on 4/28/15.
- */
 class GameSpec extends Specification {
   "before a robot is placed" >> {
     val game = Game(Table(5, 5), None)
@@ -22,13 +19,12 @@ class GameSpec extends Specification {
     }
 
     "turnLeft does nothing" in {
-      Pending("not yet implemented")
+      game.turnLeft === game
     }
 
     "turnRight does nothing" in {
-      pending
+      game.turnRight === game
     }
-
   }
 
   "once the robot has been placed" >> {
@@ -45,6 +41,14 @@ class GameSpec extends Specification {
     "moving west off the table prevents the move" in {
       val game = Game(Table(5,5),Some(Robot(CoOrds(0,4), West)))
       game.move === game
+    }
+
+    "turnLeft turns the robot" in {
+      game.turnLeft === game.copy(maybeRobot=Some(Robot(CoOrds(0,0), West)))
+    }
+
+    "turnRight turns the robot" in {
+      game.turnRight === game.copy(maybeRobot=Some(Robot(CoOrds(0,0), East)))
     }
   }
 

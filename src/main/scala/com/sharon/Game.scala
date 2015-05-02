@@ -7,7 +7,7 @@ case class Game(table: Table, maybeRobot: Option[Robot]) {
   }
 
   def place(coOrds: CoOrds, facing: Direction): Game = {
-    this.copy(maybeRobot = Some(Robot(coOrds, facing)))
+    newGame(Robot(coOrds, facing))
   }
 
   def move: Game = {
@@ -18,23 +18,9 @@ case class Game(table: Table, maybeRobot: Option[Robot]) {
     }
   }
 
-  def turnLeft:Game = {
+  def turn(rotation: Rotation):Game = {
     ifRobotPlaced { case Robot(position, direction) =>
-      newGame(Robot(position, direction.left))
-    }
-  }
-
-  def turnRight:Game = {
-    ifRobotPlaced { case Robot(position, direction) =>
-      newGame(Robot(position, direction.right))
-    }
-  }
-
-
-
-  private def turnTo(newDirection: Direction) = {
-    ifRobotPlaced { case Robot(position, direction) =>
-      newGame(Robot(position, newDirection))
+      newGame(Robot(position, direction.turn(rotation)))
     }
   }
 
@@ -50,5 +36,4 @@ case class Game(table: Table, maybeRobot: Option[Robot]) {
   private def newGame(robot: Robot) = {
     this.copy(maybeRobot = Some(robot))
   }
-
 }

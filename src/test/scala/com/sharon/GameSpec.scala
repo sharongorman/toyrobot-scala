@@ -19,39 +19,36 @@ class GameSpec extends Specification {
     }
 
     "turnLeft does nothing" in {
-      game.turnLeft === game
+      game.turn(Left) === game
     }
 
     "turnRight does nothing" in {
-      game.turnRight === game
+      game.turn(Right) === game
     }
   }
 
   "once the robot has been placed" >> {
     val game = Game(Table(5,5),Some(Robot(CoOrds(0,0), North)))
-    "move produces a game with the robot moved" in {
+    "allows a valid move" in {
       game.move === Game(Table(5,5),Some(Robot(CoOrds(0,1), North)))
     }
 
-    "moving north off the table prevents the move" in {
+    "prevents an invalid move North" in {
       val game = Game(Table(5,5),Some(Robot(CoOrds(0,4), North)))
       game.move === game
     }
 
-    "moving west off the table prevents the move" in {
+    "prevents an invalid move West" in {
       val game = Game(Table(5,5),Some(Robot(CoOrds(0,4), West)))
       game.move === game
     }
 
-    "turnLeft turns the robot" in {
-      game.turnLeft === game.copy(maybeRobot=Some(Robot(CoOrds(0,0), West)))
+    "turns the robot left" in {
+      game.turn(Left) === game.copy(maybeRobot=Some(Robot(CoOrds(0,0), West)))
     }
 
-    "turnRight turns the robot" in {
-      game.turnRight === game.copy(maybeRobot=Some(Robot(CoOrds(0,0), East)))
+    "turns the robot right" in {
+      game.turn(Right) === game.copy(maybeRobot=Some(Robot(CoOrds(0,0), East)))
     }
   }
-
-
-
 }

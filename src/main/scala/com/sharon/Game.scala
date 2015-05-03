@@ -16,28 +16,28 @@ case class Game(table: Table, maybeRobot: Option[Robot]) extends GameApi[Game] {
   }
 
   def place(coOrds: CoOrds, facing: Direction): Game = {
-    ifValidPosition(coOrds) {newPos =>
+    whenValidPosition(coOrds) {newPos =>
       newGame(Robot(newPos, facing))
     }
   }
 
   def move: Game = {
-    ifRobotPlaced { case Robot(position, direction) =>
-      ifValidPosition(position.move(direction)) {newPos =>
-        newGame(Robot(newPos, direction))
+    whenRobotPlaced { case Robot(position, facing) =>
+      whenValidPosition(position.move(facing)) {newPos =>
+        newGame(Robot(newPos, facing))
       }
     }
   }
 
   def turn(rotation: Rotation): Game = {
-    ifRobotPlaced { case Robot(position, direction) =>
-      newGame(Robot(position, direction.turn(rotation)))
+    whenRobotPlaced { case Robot(position, facing) =>
+      newGame(Robot(position, facingA .turn(rotation)))
     }
   }
 
-  private def ifRobotPlaced(f: Robot => Game): Game = maybeRobot.fold(this)(f)
+  private def whenRobotPlaced(f: Robot => Game): Game = maybeRobot.fold(this)(f)
 
-  private def ifValidPosition(newPos: CoOrds)( f: CoOrds => Game): Game = {
+  private def whenValidPosition(newPos: CoOrds)( f: CoOrds => Game): Game = {
     if (newPos isOn_: table)  f(newPos) else this
   }
 

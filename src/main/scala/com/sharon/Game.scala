@@ -31,7 +31,7 @@ case class Game(table: Table, maybeRobot: Option[Robot]) extends GameApi[Game] {
 
   def turn(rotation: Rotation): Game = {
     whenRobotPlaced { case Robot(position, facing) =>
-      newGame(Robot(position, facingA .turn(rotation)))
+      newGame(Robot(position, facing.turn(rotation)))
     }
   }
 

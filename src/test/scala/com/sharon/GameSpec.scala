@@ -47,21 +47,21 @@ class GameSpec extends Specification {
     }
 
     "reports the robot's position" in {
-      val CommandResult1(report, _ ) = game.execute(Report)
+      val CommandResult(report, _ ) = game.execute(Report)
       report must beSome("0,1,NORTH")
     }
   }
 
-  def givesExpectedResult(game: Game, command: Command, expectedResult: CommandResult1) = {
+  def givesExpectedResult(game: Game, command: Command, expectedResult: CommandResult) = {
     game.execute(command) === expectedResult
   }
 
   def doesNothing(game: Game, command: Command) = {
-    givesExpectedResult(game, command, CommandResult1(None, game))
+    givesExpectedResult(game, command, CommandResult(None, game))
   }
 
   def updatesRobot(game: Game, command: Command, expectedRobot: Robot) = {
-    val CommandResult1(_, newGame) = game.execute(command)
+    val CommandResult(_, newGame) = game.execute(command)
     newGame.maybeRobot must beSome(expectedRobot)
   }
 }

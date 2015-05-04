@@ -8,9 +8,14 @@ object Main {
 
   def processLoop(game: Game): Unit = {
     val ln = scala.io.StdIn.readLine("Next command please:")
-    val CommandResult(output, newGame) = Controller.processCommand(game, ln)
+    val CommandResult(output, updatedGame) = processCommand(game, CommandInterpreter.interpret(ln))
     output map println
-    processLoop(newGame)
+    processLoop(updatedGame)
+  }
+
+  def processCommand(game: Game, maybeCommand : Option[Command]): CommandResult = maybeCommand match {
+    case None => CommandResult(None, game)
+    case Some(command) => game.execute(command)
   }
 }
 

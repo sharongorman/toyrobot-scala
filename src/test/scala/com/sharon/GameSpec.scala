@@ -1,52 +1,67 @@
 package com.sharon
 
 import org.specs2.execute.Pending
+import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
 class GameSpec extends Specification {
   "before a robot is placed" >> {
     val game = Game(Table(5, 5), None)
 
-    "move does nothing" in {game.move === game}
-    "turnLeft does nothing" in {game.turn(Left) === game}
-    "turnRight does nothing" in {game.turn(Right) === game}
-    "report returns nothing" in {game.report must beNone}
+    "move does nothing" in {doesNothing(game, Move)}
+    "turnLeft does nothing" in {doesNothing(game, Turn(Left))}
+    "turnRight does nothing" in {doesNothing(game, Turn(Right))}
+    "report returns nothing" in {doesNothing(game, Turn(Left))}
 
     "placing a robot returns a game with a robot" in {
-      game.place(CoOrds(0,0), North) === Game(Table(5,5),Some(Robot(CoOrds(0,0), North)))
+      updatesRobot(game, Place(CoOrds(0,0), North), Robot(CoOrds(0,0), North))
     }
 
     "placing a robot at an invalid spot does nothing" in {
-      game.place(CoOrds(5,0), North) === game
+      doesNothing(game, Place(CoOrds(5,0), North))
     }
   }
 
   "once the robot has been placed" >> {
     val game = Game(Table(5,5),Some(Robot(CoOrds(0,1), North)))
     "allows a valid move" in {
-      game.move === Game(Table(5,5),Some(Robot(CoOrds(0,2), North)))
+      updatesRobot(game, Move, Robot(CoOrds(0,2), North))
     }
 
     "prevents an invalid move North" in {
       val game = Game(Table(5,5),Some(Robot(CoOrds(0,4), North)))
-      game.move === game
+      doesNothing(game, Move)
     }
 
     "prevents an invalid move West" in {
       val game = Game(Table(5,5),Some(Robot(CoOrds(0,4), West)))
-      game.move === game
+      doesNothing(game, Move)
     }
 
     "turns the robot left" in {
-      game.turn(Left) === game.copy(maybeRobot=Some(Robot(CoOrds(0,1), West)))
+      updatesRobot(game, Turn(Left), Robot(CoOrds(0,1), West))
     }
 
     "turns the robot right" in {
-      game.turn(Right) === game.copy(maybeRobot=Some(Robot(CoOrds(0,1), East)))
+      updatesRobot(game, Turn(Right), Robot(CoOrds(0,1), East))
     }
 
     "reports the robot's position" in {
-      game.report must beSome("0,1,NORTH")
+      val CommandResult1(report, _ ) = game.execute(Report)
+      report must beSome("0,1,NORTH")
     }
+  }
+
+  def givesExpectedResult(game: Game, command: Command, expectedResult: CommandResult1) = {
+    game.execute(command) === expectedResult
+  }
+
+  def doesNothing(game: Game, command: Command) = {
+    givesExpectedResult(game, command, CommandResult1(None, game))
+  }
+
+  def updatesRobot(game: Game, command: Command, expectedRobot: Robot) = {
+    val CommandResult1(_, newGame) = game.execute(command)
+    newGame.maybeRobot must beSome(expectedRobot)
   }
 }

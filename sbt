@@ -125,7 +125,7 @@ declare -r latest_29="2.9.3"
 declare -r latest_210="2.10.6"
 declare -r latest_211="2.11.8"
 declare -r latest_212="2.12.0-M3"
-declare -r sbt_launch_release_repo="http://repo.typesafe.com/typesafe/ivy-releases"
+declare -r sbt_launch_release_repo="https://repo.typesafe.com/typesafe/ivy-releases"
 declare -r sbt_launch_snapshot_repo="https://repo.scala-sbt.org/scalasbt/ivy-snapshots"
 
 declare -r script_path="$(get_script_path "$BASH_SOURCE")"
@@ -313,7 +313,7 @@ runner with the -x option.
   -prompt <expr>     Set the sbt prompt; in expr, 's' is the State and 'e' is Extracted
 
   # sbt version (default: sbt.version from $buildProps if present, otherwise $sbt_release_version)
-  -sbt-force-latest         force the use of the latest release of sbt: $sbt_release_version
+  -sbt-force-latest         force the use of the latest release of sbt: $sbt_releasef_version
   -sbt-version  <version>   use the specified version of sbt (default: $sbt_release_version)
   -sbt-dev                  use the latest pre-release version of sbt: $sbt_unreleased_version
   -sbt-jar      <path>      use the specified jar as the sbt launcher
